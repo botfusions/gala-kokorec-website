@@ -83,13 +83,7 @@
             justify-content: space-between;
             align-items: center;
         }
-        .nav-logo {
-            font-family: var(--font-display);
-            font-size: 1.5rem;
-            font-weight: 700;
-            letter-spacing: -0.03em;
-        }
-        .nav-logo span { color: var(--accent); }
+        .nav-logo img { height: 54px; display: block; }
         .nav-links {
             display: flex;
             gap: 2.5rem;
@@ -169,7 +163,12 @@
         .hero-bg {
             position: absolute;
             inset: 0;
-            background: url('images/kokorec-ambiance.png') center/cover no-repeat;
+            overflow: hidden;
+        }
+        .hero-bg video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
             transform: scale(1.1);
         }
         .hero::before {
@@ -311,12 +310,7 @@
             margin-bottom: 1rem;
             line-height: 1.5;
         }
-        .menu-card-price {
-            font-family: var(--font-display);
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--accent);
-        }
+        .menu-card-price { display: none; }
         .menu-card-tag {
             display: inline-block;
             background: rgba(212, 67, 43, 0.15);
@@ -328,6 +322,138 @@
             margin-left: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
+        }
+
+        /* === INFOGRAPHIC === */
+        .info-section {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            background: var(--bg);
+        }
+        .info-bg {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+        }
+        .info-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.18;
+            filter: blur(2px);
+        }
+        .info-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                135deg,
+                rgba(12, 10, 8, 0.92) 0%,
+                rgba(12, 10, 8, 0.7) 40%,
+                rgba(12, 10, 8, 0.85) 100%
+            );
+            z-index: 1;
+        }
+        .info-section .container {
+            position: relative;
+            z-index: 2;
+            padding-top: var(--section-padding);
+            padding-bottom: var(--section-padding);
+        }
+        .info-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        .info-left .section-label { margin-bottom: 1rem; }
+        .info-left h2 {
+            margin-bottom: 1.5rem;
+            color: var(--text);
+        }
+        .info-left h2 em {
+            font-style: normal;
+            color: var(--accent);
+        }
+        .info-desc {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
+            max-width: 480px;
+        }
+        .info-img-main {
+            width: 100%;
+            max-width: 460px;
+            border-radius: var(--radius);
+            box-shadow: 0 25px 80px rgba(0,0,0,0.6), 0 0 60px rgba(232,168,73,0.08);
+            border: 1px solid rgba(232,168,73,0.12);
+        }
+        .info-right {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            align-self: end;
+            padding-bottom: 1rem;
+        }
+        .info-card {
+            background: rgba(26, 23, 20, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(232, 168, 73, 0.1);
+            border-radius: var(--radius);
+            padding: 1.5rem 1.8rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1.2rem;
+            transition: all 0.4s ease;
+        }
+        .info-card:hover {
+            border-color: rgba(232, 168, 73, 0.3);
+            background: rgba(26, 23, 20, 0.95);
+            transform: translateX(6px);
+        }
+        .info-card-icon {
+            flex-shrink: 0;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(232, 168, 73, 0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+        }
+        .info-card-icon i { width: 22px; height: 22px; }
+        .info-card-body h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.3rem;
+        }
+        .info-card-body p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+        .info-divider {
+            width: 60px;
+            height: 3px;
+            background: var(--accent);
+            border-radius: 3px;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .info-layout {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+            .info-img-main { max-width: 100%; }
+            .info-left { text-align: center; }
+            .info-desc { max-width: 100%; }
         }
 
         /* === ABOUT === */
@@ -608,6 +734,49 @@
             color: rgba(12, 10, 8, 0.6);
         }
 
+        /* === GIANT IMAGES SECTION === */
+        .giant-images-section {
+            padding: 0;
+            background: var(--bg);
+        }
+        .giant-image-wrap {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .giant-image-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .giant-image-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(12,10,8,0.4), rgba(12,10,8,0.7));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            text-align: center;
+        }
+        .giant-image-text {
+            max-width: 800px;
+        }
+        .giant-image-text h2 {
+            font-size: clamp(2.5rem, 6vw, 6rem);
+            margin-bottom: 1.5rem;
+            color: var(--text);
+            text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .giant-image-text p {
+            font-size: clamp(1.1rem, 1.5vw, 1.5rem);
+            color: var(--accent);
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
         /* === FOOTER === */
         footer {
             background: var(--bg-warm);
@@ -694,7 +863,9 @@
     <!-- NAVBAR -->
     <nav>
         <div class="nav-inner">
-            <a href="#" class="nav-logo">GALA <span>KOKOREÇ</span></a>
+            <a href="#" class="nav-logo">
+                <img src="images/logo.svg" alt="Gala Kokoreç Logo">
+            </a>
             <ul class="nav-links" id="navLinks">
                 <li><a href="#menu">Menü</a></li>
                 <li><a href="#hakkimizda">Hakkımızda</a></li>
@@ -712,7 +883,11 @@
 
     <!-- HERO -->
     <section class="hero">
-        <div class="hero-bg"></div>
+        <div class="hero-bg">
+            <video autoplay muted loop playsinline>
+                <source src="images/hero-video.mp4" type="video/mp4">
+            </video>
+        </div>
         <div class="container">
             <div class="hero-content">
                 <div class="hero-badge reveal">
@@ -723,10 +898,10 @@
                 <p class="hero-subtitle reveal">1970'ten beri aynı ustalıkla hazırlanan kokoreç, taze midye dolma ve nefis pilav çeşitleriyle İstanbul'un kalbinde sizi bekliyoruz.</p>
                 <div class="hero-buttons reveal">
                     <a href="#menu" class="btn-primary btn-magnetic">
-                        <i data-lucide="utensils" style="width:18px;height:18px"></i> Menüyü Gör
+                        <i data-lucide="utensils" style="width:18px;height:18px"></i> Lezzetleri Keşfet
                     </a>
-                    <a href="#siparis" class="btn-outline btn-magnetic">
-                        <i data-lucide="shopping-bag" style="width:18px;height:18px"></i> Online Sipariş
+                    <a href="https://wa.me/905309667975" target="_blank" class="btn-outline btn-magnetic">
+                        <i data-lucide="message-circle" style="width:18px;height:18px"></i> WhatsApp Sipariş
                     </a>
                 </div>
                 <div class="hero-stats reveal">
@@ -735,8 +910,8 @@
                         <div class="hero-stat-label">Google Puanı</div>
                     </div>
                     <div>
-                        <div class="hero-stat-value">55+</div>
-                        <div class="hero-stat-label">Yıllık Tecrübe</div>
+                        <div class="hero-stat-value">19</div>
+                        <div class="hero-stat-label">Yıldır Aynı Adreste</div>
                     </div>
                     <div>
                         <div class="hero-stat-value">01:30</div>
@@ -751,9 +926,9 @@
     <section class="menu-section" id="menu">
         <div class="container">
             <div class="menu-header reveal">
-                <div class="section-label">Menümüz</div>
-                <h2>Damak Zevkinize Göre</h2>
-                <p>Her biri özenle hazırlanan, taze ve lezzetli ürünlerimiz</p>
+                <div class="section-label">Efsane Lezzetler</div>
+                <h2>Ateşten Gelen Gelenek</h2>
+                <p>Ustalıkla hazırlanan, Eminönü'nün ruhunu taşıyan özel tariflerimiz</p>
             </div>
             <div class="menu-grid stagger-parent">
                 <!-- Yarım Kokoreç -->
@@ -764,7 +939,6 @@
                     <div class="menu-card-body">
                         <div class="menu-card-title">Yarım Kokoreç</div>
                         <div class="menu-card-desc">Özenle temizlenmiş kuzu bağırsak, baharatlarla harmanlanıp közlenmiş. Tam kıvamında, çıtır çıtır.</div>
-                        <div class="menu-card-price">₺120<span class="menu-card-tag">En Popüler</span></div>
                     </div>
                 </div>
 
@@ -776,7 +950,6 @@
                     <div class="menu-card-body">
                         <div class="menu-card-title">Üç Çeyrek Kokoreç</div>
                         <div class="menu-card-desc">İştah açan porsiyon. Baharat sırrımız ve közleme ustalığımız her lokmada hissedilir.</div>
-                        <div class="menu-card-price">₺170</div>
                     </div>
                 </div>
 
@@ -788,7 +961,6 @@
                     <div class="menu-card-body">
                         <div class="menu-card-title">Nohut Pilav</div>
                         <div class="menu-card-desc">Tereyağında kavurulan pirinç, diri haşlanmış nohutla buluşuyor. Kokorecin yanına muhteşem eşlikçi.</div>
-                        <div class="menu-card-price">₺60</div>
                     </div>
                 </div>
 
@@ -800,7 +972,6 @@
                     <div class="menu-card-body">
                         <div class="menu-card-title">Tavuk Pilav</div>
                         <div class="menu-card-desc">Ev usulü pişirilmiş tavuk parçaları, tereyağlı pirinçle harmanlanmış. Doymak bilmez bir lezzet.</div>
-                        <div class="menu-card-price">₺80</div>
                     </div>
                 </div>
 
@@ -812,7 +983,6 @@
                     <div class="menu-card-body">
                         <div class="menu-card-title">Midye Dolma</div>
                         <div class="menu-card-desc">Taze midye içi, özel baharatlı pirinç harcıyla doldurulmuş. Limon sık, afiyetle ye.</div>
-                        <div class="menu-card-price">₺50<span class="menu-card-tag">Sokak Lezzeti</span></div>
                     </div>
                 </div>
 
@@ -824,7 +994,62 @@
                     <div class="menu-card-body">
                         <div class="menu-card-title">Tam Porsiyon Kokoreç</div>
                         <div class="menu-card-desc">Aç karın geldiyseniz buyurun. Tam porsiyon Gala Kokoreç, doyurucu ve unutulmaz bir deneyim.</div>
-                        <div class="menu-card-price">₺220<span class="menu-card-tag">Doyurucu</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- INFOGRAPHIC — Midye Dolma -->
+    <section class="info-section">
+        <div class="info-bg">
+            <img src="images/midye-dolma.png" alt="Midye Dolma Arka Plan">
+        </div>
+        <div class="container">
+            <div class="info-layout">
+                <div class="info-left">
+                    <div class="section-label reveal">İmza Lezzetimiz</div>
+                    <div class="info-divider reveal"></div>
+                    <h2 class="reveal">Midye Dolma<br><em>Ustalığı</em></h2>
+                    <p class="info-desc reveal">Eminönü sokaklarının vazgeçilmez lezzeti midye dolma, Gala Kokoreç'te taze midye içi ve özel baharatlı pirinç harcıyla özenle hazırlanır. Her bir midye, ustamızın elinde sanat eserine dönüşür.</p>
+                    <img src="images/Midye koyu tema .png" alt="Midye Dolma Detay" class="info-img-main reveal">
+                </div>
+                <div class="info-right">
+                    <div class="info-card reveal">
+                        <div class="info-card-icon">
+                            <i data-lucide="waves"></i>
+                        </div>
+                        <div class="info-card-body">
+                            <h4>Taze Midye</h4>
+                            <p>Her gün sabahın ilk saatlerinde seçilmiş taze midyeler, tertemiz şekilde hazırlanır.</p>
+                        </div>
+                    </div>
+                    <div class="info-card reveal">
+                        <div class="info-card-icon">
+                            <i data-lucide="wheat"></i>
+                        </div>
+                        <div class="info-card-body">
+                            <h4>Özel Pilav Harcı</h4>
+                            <p>Baharat sırrımızla harmanlanmış pirinç harcı, midyenin içine özenle doldurulur.</p>
+                        </div>
+                    </div>
+                    <div class="info-card reveal">
+                        <div class="info-card-icon">
+                            <i data-lucide="lemon"></i>
+                        </div>
+                        <div class="info-card-body">
+                            <h4>Limonla Servis</h4>
+                            <p>Taze sıkılmış limon suyuyla taçlandırlan midye dolma, damaklarda iz bırakır.</p>
+                        </div>
+                    </div>
+                    <div class="info-card reveal">
+                        <div class="info-card-icon">
+                            <i data-lucide="heart"></i>
+                        </div>
+                        <div class="info-card-body">
+                            <h4>19 Yıllık Tarif</h4>
+                            <p>1970'den bu yana aynı adreste, aynı ustalık. Değişmeyen lezzet.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -839,13 +1064,13 @@
                     <img src="images/ref-design-1.png" alt="Gala Kokoreç Usta" class="parallax">
                     <div class="about-image-overlay">
                         <div class="about-year">1970</div>
-                        <div class="about-year-text">Beri Eminönü'nde hizmet veriyoruz</div>
+                        <div class="about-year-text">Beri aynı adreste hizmet veriyoruz</div>
                     </div>
                 </div>
                 <div class="about-content">
                     <div class="section-label reveal">Hakkımızda</div>
-                    <h2 class="reveal">Aynı Ustalık,<br>Aynı Lezzet</h2>
-                    <p class="reveal">Gala Kokoreç, Eminönü'nün kalbinde onlarca yıldır İstanbul'un en meşhur kokoreççisi olarak hizmet vermektedir. Her gün taze hazırlanan ürünlerimiz, geleneksel tariflerimizi ve ustalığımızı taşır.</p>
+                    <h2 class="reveal">19 Yıldır Aynı Adreste,<br>Aynı Lezzet</h2>
+                    <p class="reveal">Gala Kokoreç, 1970 yılından bu yana Eminönü Kutucu Sokak No:21'de, aynı adreste kesintisiz hizmet vermektedir. Geleneksel tariflerimiz ve ustalığımız her lokmata hissedilir.</p>
                     <p class="reveal">Sabahın erken saatlerinden gece yarısına kadar, İstanbul'un hareketli sokaklarında aç kalan herkesin durak noktasıyız. Kokoreçimiz, midye dolmamız ve pilavımız dilden dile dolaşır.</p>
                     <div class="about-features reveal">
                         <div class="about-feature">
@@ -1020,7 +1245,9 @@
     <footer>
         <div class="container">
             <div class="footer-inner">
-                <div class="footer-logo">GALA <span>KOKOREÇ</span></div>
+                <div class="footer-logo">
+                    <img src="images/logo.svg" alt="Gala Kokoreç" style="height:40px">
+                </div>
                 <div class="footer-copy">&copy; <span id="year"></span> Gala Kokoreç Eminönü. Tüm hakları saklıdır.</div>
                 <div class="footer-socials">
                     <a href="https://www.instagram.com/galakokorec/" target="_blank" aria-label="Instagram">

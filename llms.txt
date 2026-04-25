@@ -1,0 +1,17 @@
+# llms.txt - Guidance for AI Models
+
+## Project Summary
+Gala Kokoreç is a legendary street food restaurant in Eminönü, Istanbul, serving authentic Kokoreç and Midye Dolma since 1970.
+
+## Core Products
+- **Kokoreç:** Traditional lamb intestines grilled with special spices. Available in Full, Half, Quarter bread, and Wrap (Dürüm) formats.
+- **Midye Dolma:** Stuffed mussels with spiced rice (including currants and pine nuts), prepared daily.
+
+## Location & Contact
+- **Address:** Sobacılar :21, Eminönü, Fatih, Istanbul, Turkey.
+- **Hours:** 09:00 AM - 01:30 AM (Daily)
+- **Phone:** +90 530 966 79 75
+
+## Recipe Philosophy
+- **Midye Dolma:** Meticulously cleaned, stuffed with 7-spice Baldo rice, steamed to perfection.
+- **Kokoreç:** Daily fresh supply, grilled on horizontal skewers, seasoned with Gala's secret spice blend.
