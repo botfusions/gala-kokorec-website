@@ -1193,6 +1193,15 @@
                     </div>
                     <div class="location-item reveal">
                         <div class="location-icon">
+                            <i data-lucide="mail" style="width:22px;height:22px"></i>
+                        </div>
+                        <div>
+                            <div class="location-item-title">E-posta</div>
+                            <div class="location-item-text"><a href="mailto:info@galakokoreceminonu.com">info@galakokoreceminonu.com</a></div>
+                        </div>
+                    </div>
+                    <div class="location-item reveal">
+                        <div class="location-icon">
                             <i data-lucide="navigation" style="width:22px;height:22px"></i>
                         </div>
                         <div>
@@ -1338,50 +1347,52 @@
         // 8. Dynamic year
         document.getElementById('year').textContent = new Date().getFullYear();
 
-        // 9. Google Business Reviews Loader
-        // Google Places API ile gerçek yorumları çek
+        // 9. Google Business Reviews — Netlify serverless function ile
         async function loadGoogleReviews() {
-            const PLACE_ID = 'ChIJvfkIsMTLyhQR36BlBcjcoFI'; // Gala Kokoreç Place ID
-            const API_KEY = ''; // API key sonra eklenecek
-
-            // API key yoksa statik yorumları göster
-            if (!API_KEY) {
-                console.log('Google API key gerekli. Statik yorumlar gösteriliyor.');
-                return;
-            }
+            const container = document.getElementById('google-reviews');
+            if (!container) return;
 
             try {
-                const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${PLACE_ID}&fields=reviews,rating,user_ratings_total&key=${API_KEY}&language=tr`;
-                const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(url)}`;
-                const res = await fetch(proxyUrl);
+                const res = await fetch('/api/reviews');
+                if (!res.ok) throw new Error('API yanıt vermedi');
                 const data = await res.json();
 
-                if (data.result && data.result.reviews) {
-                    const container = document.getElementById('google-reviews');
+                if (data.error) {
+                    console.log('Google Reviews:', data.error);
+                    return;
+                }
+
+                if (data.reviews && data.reviews.length > 0) {
                     container.innerHTML = '';
 
-                    data.result.reviews.slice(0, 6).forEach(review => {
+                    data.reviews.slice(0, 6).forEach(review => {
                         const stars = '&#9733;'.repeat(review.rating) + '&#9734;'.repeat(5 - review.rating);
-                        const timeAgo = review.relative_time_description || '';
+                        const text = review.text.length > 200
+                            ? review.text.substring(0, 200) + '...'
+                            : review.text;
                         const card = document.createElement('div');
                         card.className = 'review-card';
                         card.innerHTML = `
+                            <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem">
+                                <img src="${review.photo}" alt="${review.author}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid rgba(232,168,73,0.3)">
+                                <div>
+                                    <div class="review-author">${review.author}</div>
+                                    <div style="font-size:0.75rem;color:var(--text-muted)">${review.time || ''}</div>
+                                </div>
+                            </div>
                             <div class="review-stars">${stars}</div>
-                            <div class="review-text">"${review.text}"</div>
-                            <div class="review-author">${review.author_name}</div>
-                            <div class="review-source">Google Maps · ${timeAgo}</div>
+                            <div class="review-text">"${text}"</div>
                         `;
                         container.appendChild(card);
                     });
 
-                    // GSAP stagger animasyon
                     gsap.to(container.children, {
                         opacity: 1, y: 0, duration: 0.6, ease: 'power2.out', stagger: 0.15,
                         scrollTrigger: { trigger: container, start: 'top 80%' }
                     });
                 }
             } catch (err) {
-                console.log('Google Reviews yüklenemedi:', err);
+                console.log('Google Reviews yüklenemedi, statik yorumlar gösteriliyor:', err.message);
             }
         }
         loadGoogleReviews();
