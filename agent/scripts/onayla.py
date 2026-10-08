@@ -9,7 +9,7 @@ DONE = os.path.join(REPO, "agent", "cevaplar", "cevaplanan.json")
 ORNEK = os.path.join(REPO, "agent", "ornekler.md")
 BLOCK = re.compile(r"### (?P<id>\w+) · (?P<yazar>.+?) · (?P<puan>\d)★ · (?P<tarih>.*?)\n> (?P<yorum>.*?)\n(?:dil: (?P<dil>.*?)\n)?cevap: ?(?P<cevap>.*?)\n(?:duygu: (?P<duygu>.*?)\n)?(?:jev: (?P<jev>.*?)\n)?durum: (?P<durum>\w+)", re.S)
 EXCEL = os.path.join(REPO, "agent", "cevaplar", "yorum-cevaplari.xlsx")
-KOLONLAR = [("onay_zamani", "Onay zamanı"), ("taslak_tarihi", "Taslak tarihi"), ("yazar", "Yazar"), ("puan", "Puan"), ("dil", "Dil"), ("yorum", "Yorum"), ("cevap", "Cevap"), ("duygu", "Duygu"), ("jev", "Jev"), ("durum", "Durum"), ("google_review_id", "Google yorum ID"), ("googlea_yazildi", "Google'a yazıldı (elle doldur)")]
+KOLONLAR = [("onay_zamani", "Onay zamanı"), ("taslak_tarihi", "Yorum tarihi"), ("yazar", "Yazar"), ("puan", "Puan"), ("dil", "Dil"), ("yorum", "Yorum"), ("cevap", "Cevap"), ("duygu", "Duygu"), ("jev", "Jev"), ("durum", "Durum"), ("google_review_id", "Google yorum ID"), ("googlea_yazildi", "Google'a yazıldı (elle doldur)")]
 
 
 def parse(text):
@@ -28,7 +28,7 @@ def excel_yaz(done):
     ws.append([b for _, b in KOLONLAR])
     for d in done:
         d = dict(d); d["googlea_yazildi"] = elle.get(d.get("google_review_id")) or d.get("googlea_yazildi", "")
-        ws.append([d.get(k, "") for k, _ in KOLONLAR])
+        ws.append([("" if d.get(k) is None else d.get(k)) for k, _ in KOLONLAR])
     for col, w in zip("ABCDEFGHIJKL", (19, 12, 22, 5, 5, 60, 70, 9, 14, 7, 30, 16)):
         ws.column_dimensions[col].width = w
     wb.save(EXCEL)

@@ -45,7 +45,7 @@ Turist yorumunda Eminönü'nün konumunu bir kez vurgula.
 Her yorum için `agent/cevaplar/taslak-YYYY-MM-DD.md` dosyasına şu blok:
 
 ```
-### <id> · <yazar> · <puan>★ · <tarih: bugün>
+### <id> · <yazar> · <puan>★ · <tarih: JSON'da yorum_tarihi varsa o, yoksa bugün, YYYY-MM-DD>
 > <yorum metni>
 dil: <tr|en|de|ru|ar|...>
 cevap: <taslak cevap, yorumun dilinde — Gala Kokoreç Ekibi>

@@ -24,6 +24,8 @@ def pending(reviews, done_ids):
         item = {"id": rid, "yazar": r["author"], "puan": r["rating"], "yorum": r.get("text", "")}
         if r.get("google_review_id"):
             item["google_review_id"] = r["google_review_id"]
+        if r.get("yorum_tarihi"):
+            item["yorum_tarihi"] = r["yorum_tarihi"]
         out.append(item)
     return sorted(out, key=lambda x: x["id"])
 
@@ -58,7 +60,8 @@ def gmail_reviews(done_ids):
         grid = link.group(0).rsplit("/", 1)[1] if link else None
         if grid and grid in done_ids or grid and any(o.get("google_review_id") == grid for o in out):
             continue  # aynı yorumun ikinci bildirimi
-        out.append({"author": "mail:" + mid, "rating": 0, "text": text, "_id": grid or mid, "google_review_id": grid})
+        out.append({"author": "mail:" + mid, "rating": 0, "text": text, "_id": grid or mid, "google_review_id": grid,
+                    "yorum_tarihi": (m.get("messageTimestamp") or lst.get("messageTimestamp") or "")[:10]})
     return out
 
 
