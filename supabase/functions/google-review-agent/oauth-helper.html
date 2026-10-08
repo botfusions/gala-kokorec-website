@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gala Kokoreç — Google OAuth Token Helper</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #0C0A08;
+            color: #F5F0E8;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        .card {
+            background: #1A1714;
+            border: 1px solid rgba(232,168,73,0.2);
+            border-radius: 1rem;
+            padding: 2.5rem;
+            max-width: 700px;
+            width: 100%;
+        }
+        h1 { font-size: 1.5rem; color: #E8A849; margin-bottom: 0.5rem; }
+        p { color: #A89E8E; margin-bottom: 1.5rem; line-height: 1.6; }
+        .step { margin-bottom: 1.5rem; }
+        .step-num {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            background: rgba(232,168,73,0.15);
+            color: #E8A849;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-right: 0.5rem;
+        }
+        .step-title { font-weight: 600; margin-bottom: 0.5rem; }
+        input, textarea {
+            width: 100%;
+            background: #0C0A08;
+            border: 1px solid rgba(232,168,73,0.2);
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            color: #F5F0E8;
+            font-family: monospace;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #E8A849;
+        }
+        label { font-size: 0.85rem; color: #A89E8E; }
+        button {
+            background: #E8A849;
+            color: #0C0A08;
+            border: none;
+            padding: 0.85rem 2rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: all 0.3s;
+        }
+        button:hover { background: #F0BA60; transform: translateY(-2px); }
+        .result {
+            background: #0C0A08;
+            border: 1px solid rgba(232,168,73,0.3);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            display: none;
+        }
+        .result.show { display: block; }
+        .result pre {
+            white-space: pre-wrap;
+            word-break: break-all;
+            font-size: 0.8rem;
+            color: #E8A849;
+        }
+        .success { border-color: #25D366 !important; }
+        .error { border-color: #D4432B !important; }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Gala Kokoreç — OAuth Token Helper</h1>
+        <p>Google Business Profile API için refresh token almak için aşağıdaki adımları takip et.</p>
+
+        <!-- ADIM 1: Client ID -->
+        <div class="step" id="step1">
+            <div class="step-title"><span class="step-num">1</span> Google OAuth Bilgileri</div>
+            <label>Client ID</label>
+            <input type="text" id="clientId" placeholder="xxxxxxxx.apps.googleusercontent.com">
+            <br><br>
+            <label>Client Secret</label>
+            <input type="text" id="clientSecret" placeholder="GOCSPX-xxxxxxxx">
+            <br><br>
+            <button onclick="goToStep2()">Devam Et</button>
+        </div>
+
+        <!-- ADIM 2: Google'a yönlendir -->
+        <div class="step hidden" id="step2">
+            <div class="step-title"><span class="step-num">2</span> Google'dan İzin Al</div>
+            <p>Aşağıdaki butona tıkla, Google hesabını seç ve <strong>"Business Profile"</strong> iznini ver. Sonra seni bu sayfaya geri yönlendirecek.</p>
+            <p style="color:#E8A849;font-size:0.85rem">Not: Google Cloud Console'da Redirect URI olarak <code>http://localhost:8080</code> veya <code>https://YOUR_DOMAIN/oauth-helper.html</code> eklemelisin.</p>
+            <button onclick="authorizeWithGoogle()">Google ile Yetkilendir</button>
+        </div>
+
+        <!-- ADIM 3: Refresh Token -->
+        <div class="step hidden" id="step3">
+            <div class="step-title"><span class="step-num">3</span> Refresh Token</div>
+            <p>Google seni geri yönlendirdiğinde URL'deki <code>code</code> parametresini buraya yapıştır:</p>
+            <input type="text" id="authCode" placeholder="4/0AX4XfW...">
+            <br><br>
+            <button onclick="exchangeToken()">Token Al</button>
+            <div class="result" id="tokenResult">
+                <pre id="tokenOutput"></pre>
+            </div>
+        </div>
+
+        <!-- ADIM 4: Supabase'e kaydet -->
+        <div class="step hidden" id="step4">
+            <div class="step-title"><span class="step-num">4</span> Supabase'e Kaydet</div>
+            <p>Aşağıdaki SQL'i Supabase SQL Editor'de çalıştır:</p>
+            <textarea id="sqlOutput" rows="8" readonly></textarea>
+            <br>
+            <button onclick="copySql()">SQL'i Kopyala</button>
+        </div>
+    </div>
+
+    <script>
+        let clientId = '';
+        let clientSecret = '';
+
+        function goToStep2() {
+            clientId = document.getElementById('clientId').value.trim();
+            clientSecret = document.getElementById('clientSecret').value.trim();
+
+            if (!clientId || !clientSecret) {
+                alert('Client ID ve Client Secret gereklidir!');
+                return;
+            }
+
+            document.getElementById('step1').classList.add('hidden');
+            document.getElementById('step2').classList.remove('hidden');
+        }
+
+        function authorizeWithGoogle() {
+            const redirectUri = window.location.origin + window.location.pathname;
+            const scopes = [
+                'https://www.googleapis.com/auth/business.manage',
+                'https://www.googleapis.com/auth/plus.business.manage'
+            ].join(' ');
+
+            const url = `https://accounts.google.com/o/oauth2/v2/auth?` +
+                `client_id=${clientId}&` +
+                `redirect_uri=${encodeURIComponent(redirectUri)}&` +
+                `response_type=code&` +
+                `access_type=offline&` +
+                `prompt=consent&` +
+                `scope=${encodeURIComponent(scopes)}`;
+
+            window.location.href = url;
+        }
+
+        // URL'den code parametresini kontrol et
+        window.addEventListener('load', () => {
+            const params = new URLSearchParams(window.location.search);
+            const code = params.get('code');
+
+            if (code) {
+                // Google'dan dönüldü, adım 3'e geç
+                document.getElementById('step1').classList.add('hidden');
+                document.getElementById('step2').classList.add('hidden');
+                document.getElementById('step3').classList.remove('hidden');
+                document.getElementById('authCode').value = code;
+
+                // URL'den code parametresini temizle
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+        });
+
+        async function exchangeToken() {
+            const code = document.getElementById('authCode').value.trim();
+            const redirectUri = window.location.origin + window.location.pathname;
+            const resultDiv = document.getElementById('tokenResult');
+            const output = document.getElementById('tokenOutput');
+
+            resultDiv.classList.add('show');
+            output.textContent = 'Token alınıyor...';
+
+            try {
+                const res = await fetch('https://oauth2.googleapis.com/token', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({
+                        code,
+                        client_id: clientId,
+                        client_secret: clientSecret,
+                        redirect_uri: redirectUri,
+                        grant_type: 'authorization_code',
+                    }),
+                });
+
+                const data = await res.json();
+
+                if (data.refresh_token) {
+                    output.textContent = `✅ Refresh Token başarıyla alındı!\n\n${data.refresh_token}`;
+                    resultDiv.classList.add('success');
+
+                    // Adım 4'e geç
+                    document.getElementById('step4').classList.remove('hidden');
+                    document.getElementById('sqlOutput').value =
+                        `-- Gala Kokoreç OAuth Ayarları\n` +
+                        `UPDATE settings SET value = '${clientId}' WHERE key = 'google_client_id';\n` +
+                        `UPDATE settings SET value = '${clientSecret}' WHERE key = 'google_client_secret';\n` +
+                        `UPDATE settings SET value = '${data.refresh_token}' WHERE key = 'google_refresh_token';`;
+                } else {
+                    output.textContent = `❌ Hata: ${JSON.stringify(data, null, 2)}`;
+                    resultDiv.classList.add('error');
+                }
+            } catch (err) {
+                output.textContent = `❌ Hata: ${err.message}`;
+                resultDiv.classList.add('error');
+            }
+        }
+
+        function copySql() {
+            const sql = document.getElementById('sqlOutput');
+            sql.select();
+            navigator.clipboard.writeText(sql.value);
+            alert('SQL kopyalandı! Supabase SQL Editor\'e yapıştır.');
+        }
+    </script>
+</body>
+</html>

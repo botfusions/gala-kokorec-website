@@ -76,8 +76,10 @@ Site (Netlify)                    Backend (Supabase)
 - [x] Edge function deploy edildi
 - [x] OpenRouter API key kaydedildi
 - [x] Siteye yorum bileşeni eklendi (Netlify function)
-- [ ] Google Business API kota aktifleşmesi (bekleniyor)
-- [ ] Netlify'a GOOGLE_PLACES_API_KEY env ekleme
+- [x] Netlify'a GOOGLE_PLACES_API_KEY env eklendi
+- [x] Google Search Console site doğrulaması tamamlandı (DNS TXT)
+- [x] Google site verification meta tag eklendi
+- [ ] Google Business API erişim onayı (başvuru gönderildi, 3-14 iş günü)
 - [ ] pg_cron ile otomatik yorum kontrolü
 
 ### Kritik Environment Variables
@@ -103,10 +105,9 @@ Site (Netlify)                    Backend (Supabase)
 - [ ] Hero video - mobilde performans optimizasyonu (poster image fallback)
 
 ### Google Business & Otomasyon
-- [ ] Google Business API kota aktifleşmesini bekle (1-24 saat)
-- [ ] Netlify environment variable: GOOGLE_PLACES_API_KEY ekle
+- [ ] Google Business API erişim onayını bekle (3-14 iş günü)
 - [ ] pg_cron ile saatlik otomatik yorum kontrolü kur
-- [ ] Edge function'ı manuel test et (kota gelince)
+- [ ] Edge function'ı manuel test et (onay gelince)
 
 ## Deploy
 
