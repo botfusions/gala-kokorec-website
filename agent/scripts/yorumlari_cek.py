@@ -33,8 +33,16 @@ def main():
     done = set()
     if os.path.exists(DONE):
         done = {d["id"] for d in json.load(open(DONE))}
-    data = json.load(urllib.request.urlopen(URL, timeout=20))
-    print(json.dumps({"bekleyen_yorumlar": pending(data["reviews"], done)}, ensure_ascii=False, indent=1))
+    if os.environ.get("GALA_SOURCE") == "supabase":
+        # Business Profile API onayı gelince: edge function gala_reviews'a yazar, buradan okuruz (status=new)
+        req = urllib.request.Request(
+            os.environ["SUPABASE_URL"] + "/rest/v1/gala_reviews?status=eq.new&select=google_review_id,author_name,rating,review_text&order=review_date.desc",
+            headers={"apikey": os.environ["SUPABASE_SERVICE_KEY"], "Authorization": "Bearer " + os.environ["SUPABASE_SERVICE_KEY"]})
+        rows = json.load(urllib.request.urlopen(req, timeout=20))
+        reviews = [{"author": r["author_name"], "rating": r["rating"], "text": r["review_text"] or ""} for r in rows]
+    else:
+        reviews = json.load(urllib.request.urlopen(URL, timeout=20))["reviews"]
+    print(json.dumps({"bekleyen_yorumlar": pending(reviews, done)}, ensure_ascii=False, indent=1))
 
 
 if __name__ == "__main__":

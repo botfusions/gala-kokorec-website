@@ -7,7 +7,7 @@ import json, os, re, sys
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 DONE = os.path.join(REPO, "agent", "cevaplar", "cevaplanan.json")
 ORNEK = os.path.join(REPO, "agent", "ornekler.md")
-BLOCK = re.compile(r"### (?P<id>\w+) · (?P<yazar>.+?) · (?P<puan>\d)★ · (?P<tarih>.*?)\n> (?P<yorum>.*?)\ncevap: (?P<cevap>.+?)\n(?:duygu: .*?\n)?durum: (?P<durum>\w+)", re.S)
+BLOCK = re.compile(r"### (?P<id>\w+) · (?P<yazar>.+?) · (?P<puan>\d)★ · (?P<tarih>.*?)\n> (?P<yorum>.*?)\n(?:dil: .*?\n)?cevap: (?P<cevap>.+?)\n(?:duygu: .*?\n)?durum: (?P<durum>\w+)", re.S)
 
 
 def parse(text):
@@ -16,7 +16,7 @@ def parse(text):
 
 def main():
     if "--test" in sys.argv:
-        t = "### abc123 · Ali · 5★ · 2 gün önce\n> süper\ncevap: sağ olun — Gala Kokoreç Ekibi\nduygu: positive\ndurum: onay\n"
+        t = "### abc123 · Ali · 5★ · 2 gün önce\n> süper\ndil: tr\ncevap: sağ olun — Gala Kokoreç Ekibi\nduygu: positive\ndurum: onay\n"
         b = parse(t); assert b and b[0]["id"] == "abc123" and b[0]["durum"] == "onay", b
         print("ok"); return
     blocks = parse(open(sys.argv[1], encoding="utf-8").read())
