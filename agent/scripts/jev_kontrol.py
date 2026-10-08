@@ -12,12 +12,18 @@ from onayla import BLOCK  # aynı blok ayrıştırıcı
 
 ENV_DOSYA = os.path.expanduser("~/.hermes/profiles/gala/.env")
 # (uç nokta, model) — ilki 404 verirse ikincisi denenir (JEV-HANDOFF bölüm 10)
-UCLAR = [("https://openrouter.ai/api/v1/systemone", "typesafe/jev-1.13"),
+MODEL = os.environ.get("JEV_MODEL", "typesafe/jev-1.13")  # cloudflare/clef ve cloudflare/clef-flash de aynı uçta çalışır
+UCLAR = [("https://openrouter.ai/api/v1/systemone", MODEL),
          ("https://openrouter.ai/api/alpha/decisions", "~typesafe/jev-latest")]
 ESIK = 0.6  # noul > ESIK → ihlal
 IMZA = "Gala Kokoreç Ekibi"
 EMOJI = re.compile(r"[\U0001F300-\U0001FAFF✀-➿❤]")
 YASAK = re.compile(r"yapay zek[aâ]|\bbot\b|otomatik", re.I)
+
+def aid(k):
+    """Soru kimliği ASCII olmalı (Clef `^[A-Za-z0-9_.-]+$` ister); etiketler Türkçe kalır."""
+    return k.translate(str.maketrans("öşçüğıÖŞÇÜĞİ", "oscugiOSCUGI"))
+
 
 SORULAR = {
     "dil": {"q": "Is `cevap` written in the same language as `yorum`? Judge the grammar and common words of the sentences; ignore names of dishes, places and people such as 'kokoreç' or 'Eminönü'.",
@@ -102,14 +108,14 @@ def jev_kontrol(key, b, ayrinti=False):
     # imza sabit Türkçe; dil sorusunu şaşırtmasın diye state'e girmez (imza kontrolü kod_kontrol'de)
     state = {"yorum": b["yorum"].replace("\n> ", "\n"), "puan": int(b["puan"]), "cevap": b["cevap"].replace("— " + IMZA, "").strip()}
     sorular = {k: {"type": "noul", "instructions": {"question": v["q"], "inspect": ["yorum", "cevap"]},
-                   "criteria": {"true": v["t"], "false": v["f"]}} for k, v in SORULAR.items()}
+                   "criteria": {"true": v["t"], "false": v["f"]}} for k, v in ((aid(k), v) for k, v in SORULAR.items())}
     sorular["duygu"] = {"type": "choice", "instructions": "What is the customer's overall sentiment in `yorum`?", "criteria": DUYGU}
     a = jev_sor(key, state, sorular)
     if ayrinti:
-        print("   " + " ".join(f"{k}={a[k]['noul']:.2f}" for k in SORULAR) + f" duygu={a['duygu']['choice']}({a['duygu']['confidence']:.2f})")
+        print("   " + " ".join(f"{k}={a[aid(k)]['noul']:.2f}" for k in SORULAR) + f" duygu={a['duygu']['choice']}({a['duygu']['confidence']:.2f})")
     ihlal = []
     for k in SORULAR:
-        p = a[k]["noul"]
+        p = a[aid(k)]["noul"]
         if k in ("dil", "detay"):  # olumlu soru; ihlal = olumsuz taraf
             p = 1 - p
         if k == "özür" and int(b["puan"]) > 2:  # özür yalnız 1-2★'da yasak
