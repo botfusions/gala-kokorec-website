@@ -124,6 +124,8 @@ Tüm hakları saklıdır. Gala Kokoreç Eminönü.
 
 ## Google Yorum Cevap Ajanı (Hermes `gala` profili)
 
+Kalite kapısı modeli: Cloudflare Clef (`cloudflare/clef`, OpenRouter `systemone` ucu, Jev uyumlu API). `JEV_MODEL=typesafe/jev-1.13` ile Jev'e dönülür. `cloudflare/clef-flash` testte 3/11 verdi, kullanma.
+
 Bu klasöre bağlı Hermes profili 4 saatte bir (00, 04, 08, 12, 16, 20) cenk@galakokoreceminonu.com kutusundaki Google yorum bildirimlerini kontrol eder; yeni yorum varsa cevap taslağı yazar ve Jev ile denetler. Yeni mail yoksa ajan uyanmaz. Google'a hiçbir şey göndermez.
 
 | Parça | Yer |

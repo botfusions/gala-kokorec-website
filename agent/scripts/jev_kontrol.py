@@ -12,7 +12,7 @@ from onayla import BLOCK  # aynı blok ayrıştırıcı
 
 ENV_DOSYA = os.path.expanduser("~/.hermes/profiles/gala/.env")
 # (uç nokta, model) — ilki 404 verirse ikincisi denenir (JEV-HANDOFF bölüm 10)
-MODEL = os.environ.get("JEV_MODEL", "typesafe/jev-1.13")  # cloudflare/clef ve cloudflare/clef-flash de aynı uçta çalışır
+MODEL = os.environ.get("JEV_MODEL", "cloudflare/clef")  # Jev uyumlu; typesafe/jev-1.13 de olur. clef-flash testte 3/11 verdi, kullanma
 UCLAR = [("https://openrouter.ai/api/v1/systemone", MODEL),
          ("https://openrouter.ai/api/alpha/decisions", "~typesafe/jev-latest")]
 ESIK = 0.6  # noul > ESIK → ihlal
