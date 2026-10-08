@@ -2,7 +2,7 @@
 """Sitedeki /api/reviews uç noktasından yorumları çeker, cevaplanmamış olanları JSON basar.
 Hermes --monitor-script olarak çalışır: çıktı değişmezse ajan uyanmaz.
 ponytail: Places API son 5 yorumu verir; Business Profile API onayı gelince kaynağı oraya çevir."""
-import hashlib, json, os, sys, urllib.request
+import hashlib, json, os, re, sys, urllib.request
 
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 DONE = os.path.join(REPO, "agent", "cevaplar", "cevaplanan.json")
@@ -21,32 +21,43 @@ def pending(reviews, done_ids):
         rid = review_id(r)
         if rid in done_ids:
             continue
-        out.append({"id": rid, "yazar": r["author"], "puan": r["rating"], "yorum": r.get("text", "")})
+        item = {"id": rid, "yazar": r["author"], "puan": r["rating"], "yorum": r.get("text", "")}
+        if r.get("google_review_id"):
+            item["google_review_id"] = r["google_review_id"]
+        out.append(item)
     return sorted(out, key=lambda x: x["id"])
+
+
+def composio(tool, arguments):
+    body = json.dumps({"connected_account_id": os.environ["COMPOSIO_CONNECTED_ACCOUNT"],
+                       "user_id": os.environ["COMPOSIO_USER_ID"], "arguments": arguments}).encode()
+    req = urllib.request.Request(f"https://backend.composio.dev/api/v3/tools/execute/{tool}", data=body,
+                                 headers={"x-api-key": os.environ["COMPOSIO_API_KEY"], "Content-Type": "application/json"})
+    d = json.load(urllib.request.urlopen(req, timeout=30))
+    if not d.get("successful"):
+        sys.exit(f"composio hata ({tool}): {d.get('error')}")
+    return d["data"]
 
 
 def gmail_reviews(done_ids):
     """Composio üzerinden cenk@galakokoreceminonu.com kutusundaki Google yorum bildirimlerini çeker.
     Ayrıştırmayı ajan yapar: her mail tek 'yorum' alanı olarak ham metinle gider, id = Gmail messageId.
     ponytail: Google bildirim şablonu değişse bile regex kırılmaz; ajan metni okur."""
-    body = json.dumps({
-        "connected_account_id": os.environ["COMPOSIO_CONNECTED_ACCOUNT"],
-        "user_id": os.environ["COMPOSIO_USER_ID"],
-        "arguments": {"query": os.environ.get("GALA_GMAIL_QUERY", "from:google.com (yorum OR review OR değerlendirme) newer_than:30d"),
-                      "max_results": 20, "include_payload": True, "verbose": False},
-    }).encode()
-    req = urllib.request.Request("https://backend.composio.dev/api/v3/tools/execute/GMAIL_FETCH_EMAILS", data=body,
-                                 headers={"x-api-key": os.environ["COMPOSIO_API_KEY"], "Content-Type": "application/json"})
-    d = json.load(urllib.request.urlopen(req, timeout=30))
-    if not d.get("successful"):
-        sys.exit(f"composio hata: {d.get('error')}")
+    d = composio("GMAIL_FETCH_EMAILS", {"query": os.environ.get("GALA_GMAIL_QUERY", "from:businessprofile-noreply@google.com subject:(yorum yaptı OR review) newer_than:30d"),
+                                       "max_results": 20, "include_payload": False})
     out = []
-    for m in d["data"].get("messages", []):
-        mid = m.get("messageId")
+    for lst in d.get("messages", []):
+        mid = lst.get("messageId")
         if not mid or mid in done_ids:
             continue
-        text = (m.get("subject", "") + "\n" + (m.get("messageText") or m.get("preview", {}).get("body", "")))[:2000]
-        out.append({"author": "mail:" + mid, "rating": 0, "text": text, "_id": mid})
+        m = composio("GMAIL_FETCH_MESSAGE_BY_MESSAGE_ID", {"message_id": mid, "format": "full"})  # liste çağrısı yalnızca önizleme verir
+        raw = m.get("subject", "") + "\n" + (m.get("messageText") or "")
+        text = re.sub(r"[\u200b\u200c\u200d\u00a0\s]+", " ", re.sub(r"<https?://[^>]+>", " ", raw)).strip()[:1500]
+        link = re.search(r"https://business\.google\.com/n/\d+/reviews/[A-Za-z0-9_-]+", m.get("messageText") or "")
+        grid = link.group(0).rsplit("/", 1)[1] if link else None
+        if grid and grid in done_ids or grid and any(o.get("google_review_id") == grid for o in out):
+            continue  # aynı yorumun ikinci bildirimi
+        out.append({"author": "mail:" + mid, "rating": 0, "text": text, "_id": grid or mid, "google_review_id": grid})
     return out
 
 
