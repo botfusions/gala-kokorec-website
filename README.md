@@ -124,7 +124,7 @@ Tüm hakları saklıdır. Gala Kokoreç Eminönü.
 
 ## Google Yorum Cevap Ajanı (Hermes `gala` profili)
 
-Bu klasöre bağlı Hermes profili her gün 10:00'da yeni yorumları çeker ve cevap taslağı yazar. Google'a hiçbir şey göndermez.
+Bu klasöre bağlı Hermes profili 4 saatte bir (00, 04, 08, 12, 16, 20) cenk@galakokoreceminonu.com kutusundaki Google yorum bildirimlerini kontrol eder; yeni yorum varsa cevap taslağı yazar ve Jev ile denetler. Yeni mail yoksa ajan uyanmaz. Google'a hiçbir şey göndermez.
 
 | Parça | Yer |
 |---|---|
