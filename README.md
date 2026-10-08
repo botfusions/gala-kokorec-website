@@ -151,5 +151,7 @@ python3 agent/scripts/jev_kontrol.py agent/cevaplar/taslak-2026-10-08.md
 
 Etiketli vakalarla isabet ölçümü: `python3 agent/scripts/jev_kontrol.py --test agent/tests/jev_vakalar.md`
 
-Onaylanan cevap `ornekler.md`'ye girer, ajan bir sonraki turda ondan öğrenir. Elle çalıştırmak için `hermes -p gala cron run e96b34cf3433`.
+Onaylanan cevap `ornekler.md`'ye girer, ajan bir sonraki turda ondan öğrenir.
+
+Cevabı Google'a yapıştırınca `agent/cevaplar/yorum-cevaplari.xlsx` içindeki "Google'a yazıldı" kolonuna tarih yaz. Sonraki 4 saatlik turda (ya da elle `python3 agent/scripts/yorumlari_cek.py --okundu <google_yorum_id>`) o yorumun bildirim maili Gmail'de okundu olur. Elle çalıştırmak için `hermes -p gala cron run e96b34cf3433`.
 Google Business Profile API onayı gelince onaylanan cevapları gönderme adımı eklenecek.
