@@ -5,7 +5,7 @@ Kullanım:
   python3 agent/scripts/jev_kontrol.py agent/cevaplar/taslak-2026-10-08.md [--dry]
   python3 agent/scripts/jev_kontrol.py --test agent/tests/jev_vakalar.md
 Her bloğa `durum:` satırının üstüne `jev: OK` ya da `jev: ihlal=özür(0.82),dil(0.71)` yazar."""
-import json, os, re, sys, urllib.error, urllib.request
+import json, time, os, re, sys, urllib.error, urllib.request
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from onayla import BLOCK  # aynı blok ayrıştırıcı
@@ -56,11 +56,15 @@ def jev_sor(key, state, questions):
     for i, (uc, model) in enumerate(UCLAR):
         body = json.dumps({"model": model, "state": state, "questions": questions}).encode()
         req = urllib.request.Request(uc, data=body, headers={"Authorization": "Bearer " + key, "Content-Type": "application/json"})
-        try:
-            with urllib.request.urlopen(req, timeout=60) as r:
-                return json.loads(r.read())["answers"]
-        except urllib.error.HTTPError as e:
-            if e.code != 404 or i == len(UCLAR) - 1:
+        for deneme in range(4):  # 5xx/429 (yoğunluk) için 3 yeniden deneme: 5s, 15s, 45s
+            try:
+                with urllib.request.urlopen(req, timeout=60) as r:
+                    return json.loads(r.read())["answers"]
+            except urllib.error.HTTPError as e:
+                if e.code == 404 and i < len(UCLAR) - 1:
+                    break
+                if e.code in (429, 500, 502, 503, 529) and deneme < 3:
+                    time.sleep(5 * 3 ** deneme); continue
                 sys.exit(f"Jev {e.code}: {e.read()[:300].decode(errors='replace')}")
 
 
