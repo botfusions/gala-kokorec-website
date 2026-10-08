@@ -141,5 +141,13 @@ Onay döngüsü: taslak dosyasında `durum: bekliyor` → `onay` (cevabı düzel
 python3 agent/scripts/onayla.py agent/cevaplar/taslak-2026-10-08.md
 ```
 
+Jev kalite kapısı (OpenRouter üzerinden `typesafe/jev-1.13`, `OPENROUTER_API_KEY` env ya da `~/.hermes/profiles/gala/.env`; dil, özür, vaat, şablon, suçlama, detay, duygu + imza/cümle/emoji kontrolü), her bloğa `jev:` satırı yazar, `--dry` yalnız raporlar, `-v` ham olasılıkları basar:
+
+```
+python3 agent/scripts/jev_kontrol.py agent/cevaplar/taslak-2026-10-08.md
+```
+
+Etiketli vakalarla isabet ölçümü: `python3 agent/scripts/jev_kontrol.py --test agent/tests/jev_vakalar.md`
+
 Onaylanan cevap `ornekler.md`'ye girer, ajan bir sonraki turda ondan öğrenir. Elle çalıştırmak için `hermes -p gala cron run e96b34cf3433`.
 Google Business Profile API onayı gelince onaylanan cevapları gönderme adımı eklenecek.

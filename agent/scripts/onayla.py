@@ -7,7 +7,7 @@ import json, os, re, sys
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 DONE = os.path.join(REPO, "agent", "cevaplar", "cevaplanan.json")
 ORNEK = os.path.join(REPO, "agent", "ornekler.md")
-BLOCK = re.compile(r"### (?P<id>\w+) · (?P<yazar>.+?) · (?P<puan>\d)★ · (?P<tarih>.*?)\n> (?P<yorum>.*?)\n(?:dil: .*?\n)?cevap: ?(?P<cevap>.*?)\n(?:duygu: .*?\n)?durum: (?P<durum>\w+)", re.S)
+BLOCK = re.compile(r"### (?P<id>\w+) · (?P<yazar>.+?) · (?P<puan>\d)★ · (?P<tarih>.*?)\n> (?P<yorum>.*?)\n(?:dil: .*?\n)?cevap: ?(?P<cevap>.*?)\n(?:(?:duygu|jev): .*?\n)*durum: (?P<durum>\w+)", re.S)
 
 
 def parse(text):
