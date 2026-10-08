@@ -121,3 +121,25 @@ git push origin main
 ## Lisans
 
 Tüm hakları saklıdır. Gala Kokoreç Eminönü.
+
+## Google Yorum Cevap Ajanı (Hermes `gala` profili)
+
+Bu klasöre bağlı Hermes profili her gün 10:00'da yeni yorumları çeker ve cevap taslağı yazar. Google'a hiçbir şey göndermez.
+
+| Parça | Yer |
+|---|---|
+| Kimlik, ton, puan stratejisi | `agent/SOUL.md` |
+| Onaylı örnekler (eğitim seti) | `agent/ornekler.md` |
+| Günlük görev | `agent/prompts/gunluk-yorum-turu.md` |
+| Yorum çekme (monitor script) | `agent/scripts/yorumlari_cek.py` → kopyası `~/.hermes/profiles/gala/scripts/gala_yorumlari_cek.py` |
+| Taslaklar | `agent/cevaplar/taslak-YYYY-MM-DD.md` |
+| Cevaplanan kayıt | `agent/cevaplar/cevaplanan.json` |
+
+Onay döngüsü: taslak dosyasında `durum: bekliyor` → `onay` (cevabı düzeltebilirsin) ya da `red`, sonra:
+
+```
+python3 agent/scripts/onayla.py agent/cevaplar/taslak-2026-10-08.md
+```
+
+Onaylanan cevap `ornekler.md`'ye girer, ajan bir sonraki turda ondan öğrenir. Elle çalıştırmak için `hermes -p gala cron run e96b34cf3433`.
+Google Business Profile API onayı gelince onaylanan cevapları gönderme adımı eklenecek.
