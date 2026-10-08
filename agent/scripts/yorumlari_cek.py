@@ -52,7 +52,8 @@ def gmail_reviews(done_ids):
             continue
         m = composio("GMAIL_FETCH_MESSAGE_BY_MESSAGE_ID", {"message_id": mid, "format": "full"})  # liste çağrısı yalnızca önizleme verir
         raw = m.get("subject", "") + "\n" + (m.get("messageText") or "")
-        text = re.sub(r"[\u200b\u200c\u200d\u00a0\s]+", " ", re.sub(r"<https?://[^>]+>", " ", raw)).strip()[:1500]
+        text = re.sub(r"[\u200b\u200c\u200d\u00a0\s]+", " ", re.sub(r"<https?://[^>]+>", " ", raw)).strip()
+        text = text.split("Yorumu yanıtla")[0].split("Reply to review")[0].strip()[:1500]  # mail kuyruğundaki HTML/footer atılır
         link = re.search(r"https://business\.google\.com/n/\d+/reviews/[A-Za-z0-9_-]+", m.get("messageText") or "")
         grid = link.group(0).rsplit("/", 1)[1] if link else None
         if grid and grid in done_ids or grid and any(o.get("google_review_id") == grid for o in out):
