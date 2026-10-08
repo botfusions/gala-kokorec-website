@@ -2,7 +2,7 @@
 """Sitedeki /api/reviews uç noktasından yorumları çeker, cevaplanmamış olanları JSON basar.
 Hermes --monitor-script olarak çalışır: çıktı değişmezse ajan uyanmaz.
 ponytail: Places API son 5 yorumu verir; Business Profile API onayı gelince kaynağı oraya çevir."""
-import hashlib, json, os, re, sys, urllib.request
+import glob, hashlib, json, os, re, sys, urllib.request
 
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 DONE = os.path.join(REPO, "agent", "cevaplar", "cevaplanan.json")
@@ -72,6 +72,8 @@ def main():
     done = set()
     if os.path.exists(DONE):
         done = {d["id"] for d in json.load(open(DONE))}
+    for f in glob.glob(os.path.join(REPO, "agent", "cevaplar", "taslak-*.md")):  # taslağı yazılmış, onay bekleyen
+        done |= set(re.findall(r"^### (\S+) ·", open(f, encoding="utf-8").read(), re.M))
     if os.environ.get("GALA_SOURCE") == "supabase":
         # Business Profile API onayı gelince: edge function gala_reviews'a yazar, buradan okuruz (status=new)
         req = urllib.request.Request(
