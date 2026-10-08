@@ -1,4 +1,4 @@
-# HANDOFF — Gala Kokoreç yorum ajanı (8 Ekim 2026)
+# HANDOFF — Gala Kokoreç yorum ajanı (güncelleme: 9 Ekim 2026)
 
 ## Durum özeti
 Google yorum bildirimleri e-postadan alınır, Hermes `gala` profili cevap taslağı yazar, Clef taslağı denetler, Cenk onaylar, onaylı cevaplar örnek setine ve Excel'e işlenir. Google'a otomatik gönderim yok. Cenk cevapları Google Maps'e elle yapıştırır.
@@ -38,18 +38,19 @@ Gmail (Composio) → yorumlari_cek.py → Hermes gala (Codex Luna, medium) → t
 - Gmail kaynağı gerçek bildirim mailinden yorum ve Google yorum kimliğini çıkarıyor.
 - Cron elle tetiklendi, Codex ile tamamlandı, taslak yazıldı.
 - Excel'de 7 cevap var (5 Ekim'den 8 Ekim'e).
+- Gece 00:00 OTOMATİK koşusu 9 Ekim'de çalıştı: `completed`, `last_status: ok`, `failure_streak: 0`. Yeni taslak dosyası oluşmadı. Koşu çıktısı açılmadı, Gmail'de gerçekten yeni yorum maili olmadığı kesinleşmedi.
 - Mac uykuya geçmiyor (`pmset sleep 0`, caffeinate açık).
 
 - Okundu eşlemesi: Excel'de "Google'a yazıldı" kolonu dolu satırların bildirim mailleri sonraki turda okundu olur (`okundu_senkron`). Mail okundu yapma Composio ile canlı doğrulandı (Oğuzhan'ın 2 maili). Excel okuyucu standart kütüphane, `openpyxl` gerektirmez.
 
 ## Doğrulanmayanlar
 - Excel'den tetiklenen okundu akışı uçtan uca görülmedi: parça parça sınandı (Excel okuma + sahte işaretleyici, gerçek mail işaretleme elle). İlk gerçek tarih girişinde sonucu kontrol et.
-- Gece 00:00 OTOMATİK koşusu henüz görülmedi. Sadece elle tetiklenen koşu görüldü.
+- 04:00 ve sonraki otomatik koşular henüz izlenmedi. Yeni yorum gelince otomatik koşunun taslak yazdığı görülmedi.
 - Cron içinde Clef adımı bir kez OpenRouter 529 hatası aldı. Yeniden deneme eklendi, canlı cron'da tekrar sınanmadı.
 - `alpha/decisions` yedek ucu hiç tetiklenmedi.
 
 ## Sıradaki işler
-1. **Takip:** 00:00 ve 04:00 koşularını kontrol et.
+1. **Takip:** 04:00 ve sonraki koşuları kontrol et (00:00 koşusu ok).
    ```
    hermes -p gala cron runs e96b34cf3433
    ```
