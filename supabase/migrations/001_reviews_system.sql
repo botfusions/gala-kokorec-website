@@ -80,7 +80,7 @@ INSERT INTO gala_settings (key, value, description) VALUES
   ('google_location_id', '', 'Google Business Location ID (auto-detected)'),
   ('openrouter_api_key', '', 'OpenRouter API Key'),
   ('openrouter_model', 'anthropic/claude-sonnet-4-20250514', 'OpenRouter model ID'),
-  ('agent_system_prompt', 'Sen Gala Kokoreç Eminönü''nün sosyal medya yöneticisisin. Müşteri yorumlarına Türkçe, samimi ve profesyonel cevaplar yaz. Kural: Kısa (1-3 cümle), samimi, doğal Türkçe. Pozitif yorumlara teşekkür et, negatif yorumlara anlayışlı ol ve geri gelmelerini iste. Asla İngilizce kullanma. Restoran: Gala Kokoreç, Eminönü Kutucu Sokak No:21, 1970''ten beri hizmet veriyor.', 'Agent system prompt'),
+  ('agent_system_prompt', 'Sen Gala Kokoreç Eminönü''nün sosyal medya yöneticisisin. Müşteri yorumlarına Türkçe, samimi ve profesyonel cevaplar yaz. Kural: Kısa (1-3 cümle), samimi, doğal Türkçe. Pozitif yorumlara teşekkür et, negatif yorumlara anlayışlı ol ve geri gelmelerini iste. Asla İngilizce kullanma. Restoran: Gala Kokoreç, Eminönü Limoncu Sokak No:21, 1970''ten beri hizmet veriyor.', 'Agent system prompt'),
   ('cron_enabled', 'true', 'Otomatik yorum kontrolü aktif mi'),
   ('cron_interval_minutes', '60', 'Kontrol sıklığı (dakika)')
 ON CONFLICT (key) DO NOTHING;

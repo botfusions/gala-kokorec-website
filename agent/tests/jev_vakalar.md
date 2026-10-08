@@ -65,7 +65,7 @@ beklenen: dil,duygu
 ### sent02 · Merve Aksoy · 1★ · tarih: bugün
 > Yarım kokoreç söyledim, 40 dakika bekledim, gelen de soğuktu. Bir daha gelmem.
 dil: tr
-cevap: Yarım kokoreçte 40 dakika beklemeniz ve soğuk servis için özür dileriz, hatamız. Yoğun saatte böyle bir aksaklık yaşanmış; detayı konuşmak isteriz: 0530 966 79 75 — Gala Kokoreç Ekibi
+cevap: Yarım kokoreçte 40 dakika beklemeniz ve soğuk servis için özür dileriz, hatamız. Yoğun saatte böyle bir aksaklık yaşanmış; detayı konuşmak isteriz: 0533 072 61 30 — Gala Kokoreç Ekibi
 duygu: negative
 durum: bekliyor
 beklenen: özür
@@ -73,7 +73,7 @@ beklenen: özür
 ### sent03 · Kerem Dağ · 2★ · tarih: bugün
 > Midye dolma bayattı, kokoreç fena değildi ama fiyat yüksek.
 dil: tr
-cevap: Midye dolmanın beklentinizi karşılamaması bizi üzdü; bu, alıştığınız Gala kalitesi değil. Bir sonraki kokoreç bizden, telefonla haber verin yeter: 0530 966 79 75 — Gala Kokoreç Ekibi
+cevap: Midye dolmanın beklentinizi karşılamaması bizi üzdü; bu, alıştığınız Gala kalitesi değil. Bir sonraki kokoreç bizden, telefonla haber verin yeter: 0533 072 61 30 — Gala Kokoreç Ekibi
 duygu: mixed
 durum: bekliyor
 beklenen: vaat

@@ -13,7 +13,7 @@ cevap: Thank you! Being steps from the Spice Bazaar since 1970 is our pride. See
 
 ## 2★ · TR
 > Çok bekledik, sipariş karıştı.
-cevap: Beklettiğimiz için üzgünüz, akşam yoğunluğunda sipariş sırası karışabiliyor. Detayı konuşmak isteriz: 0530 966 79 75 — Gala Kokoreç Ekibi
+cevap: Beklettiğimiz için üzgünüz, akşam yoğunluğunda sipariş sırası karışabiliyor. Detayı konuşmak isteriz: 0533 072 61 30 — Gala Kokoreç Ekibi
 
 ## 5★
 > Vallahi ben bu kadar beklemezdim . tesadüfen Süleymaniye camiden indim . İyiki oraya inmiş im kokoreç güzel değil süper arkadaşa sade istedim bana unutmayacağım bı lezzzet sundu. Kralsinsiniz çok yakında oradayım her istanbul turunda ziyaret listemde artik

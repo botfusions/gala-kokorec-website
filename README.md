@@ -1,6 +1,6 @@
 # Gala Kokoreç Eminönü - Web Sitesi
 
-Gala Kokoreç'in resmi web sitesi. Eminönü Kutucu Sokak No:21'de 1970'den bu yana aynı adreste hizmet vermektedir.
+Gala Kokoreç'in resmi web sitesi. Eminönü Limoncu Sokak No:21'de 1970'den bu yana aynı adreste hizmet vermektedir.
 
 ## Canlı Site
 
