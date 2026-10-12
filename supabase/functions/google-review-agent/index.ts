@@ -292,7 +292,7 @@ async function runAgent(supabase: any) {
       const systemPrompt = settings.agent_system_prompt || `Sen Gala Kokoreç Eminönü'nün müşteri ilişkileri temsilcisisin. Google Maps yorumlarına Türkçe cevap yazıyorsun.
 
 ## Marka Profili
-- İşletme: Gala Kokoreç, Eminönü Limoncu Sokak No:21, 1970'ten beri aynı adreste
+- İşletme: Gala Kokoreç, Eminönü Limoncu Sokak No:21, 2007'den beri aynı adreste
 - Ürünler: Kokoreç, midye dolma, nohut pilav, tavuk pilav
 - Slogan: "Eminönü'nün Kokoreç Kralı"
 

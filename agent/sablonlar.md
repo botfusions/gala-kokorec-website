@@ -13,8 +13,8 @@ Yorum Türkçe ve İngilizce dışında bir dildeyse ajan şablonu o dile çevir
 **EN:** Thanks for the review! We noted {detail}; next time we'll work to earn that fifth star 🙏 — Gala Kokoreç Ekibi
 
 ## Karışık (3★)
-**TR:** {detay} konusundaki geri bildiriminiz bizim için değerli. Ustalarımızla paylaşacağız, yeniden ağırlamak isteriz — Gala Kokoreç Ekibi
-**EN:** Your feedback on {detail} matters to us. We'll share it with our team and hope to host you again — Gala Kokoreç Ekibi
+**TR:** {detay} konusundaki geri bildiriminiz bizim için değerli. Kokoreçlerimiz sipariş üstüne doğranır; notunuzu ustalarımızla paylaşacağız, yeniden ağırlamak isteriz — Gala Kokoreç Ekibi
+**EN:** Your feedback on {detail} matters to us. Our kokoreç is chopped to order; we'll share your note with our team and hope to host you again — Gala Kokoreç Ekibi
 
 ## Olumsuz (1-2★) — özür yok, hediye yok, telefon var
 **TR:** {detay} yaşamanız bizi üzdü; bu, alıştığınız Gala kalitesi değil. Yoğun saatlerde böyle aksaklıklar olabiliyor. Detayı konuşmak isteriz: 0533 072 61 30 — Gala Kokoreç Ekibi

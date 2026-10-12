@@ -9,7 +9,7 @@ cevap: Selamınız ustaya iletildi, sıcak ekmek bizim imzamız 😊 Tekrar bekl
 
 ## 5★ · EN
 > Best kokorec in Istanbul, right next to the Spice Bazaar. Friendly staff.
-cevap: Thank you! Being steps from the Spice Bazaar since 1970 is our pride. See you on your next Istanbul trip 🙏 — Gala Kokoreç Ekibi
+cevap: Thank you! Being steps from the Spice Bazaar since 2007 is our pride. See you on your next Istanbul trip 🙏 — Gala Kokoreç Ekibi
 
 ## 2★ · TR
 > Çok bekledik, sipariş karıştı.
