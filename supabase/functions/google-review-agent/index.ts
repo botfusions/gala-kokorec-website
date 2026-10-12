@@ -100,31 +100,6 @@ async function fetchReviews(
   return data.reviews || [];
 }
 
-async function replyToReview(
-  token: string,
-  reviewName: string,
-  comment: string
-): Promise<any> {
-  const res = await fetch(
-    `${INFO_URL}/${reviewName}/reply`,
-    {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ comment }),
-    }
-  );
-
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`Reply failed: ${err}`);
-  }
-
-  return res.json();
-}
-
 // --- OpenRouter Agent ---
 async function generateReply(
   apiKey: string,
@@ -210,6 +185,11 @@ async function runAgent(supabase: any) {
   const settings: Settings = {};
   for (const row of settingsData || []) {
     settings[row.key] = row.value;
+  }
+
+  if (settings.cron_enabled !== "true") {
+    console.log("[Agent] cron_enabled != true, çıkılıyor");
+    return { skipped: true };
   }
 
   const required = [
@@ -360,29 +340,20 @@ Her cevap JSON formatında olmalı:
         review.comment || ""
       );
 
-      // Google'a cevabi gonder
-      await replyToReview(accessToken, reviewId, reply);
-
-      // DB guncelle
+      // Draft-only: Google'a GÖNDERME. Taslak status='new' + reply_text olarak kalır, yayın kararı Cenk'te.
       await supabase
         .from("gala_reviews")
-        .update({
-          status: "replied",
-          reply_text: reply,
-          replied_at: new Date().toISOString(),
-          sentiment,
-        })
+        .update({ status: "new", reply_text: reply, sentiment })
         .eq("id", inserted.id);
 
-      // Audit log
       await supabase.from("gala_audit_log").insert({
         review_id: inserted.id,
-        action: "auto_replied",
+        action: "draft_created",
         details: { reply, sentiment, rating },
       });
 
       repliedCount++;
-      console.log(`[Agent] Replied to ${review.reviewer?.displayName}: "${reply.substring(0, 50)}..."`);
+      console.log(`[Agent] Draft for ${review.reviewer?.displayName}: "${reply.substring(0, 50)}..."`);
 
       // Rate limit: 2 saniye bekle
       await new Promise((r) => setTimeout(r, 2000));
